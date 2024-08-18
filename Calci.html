@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-700">
+    <div class="mt-9 border-0 bg-black-200 rounded-lg shadow-md p-4">
+        <h1 class="text-3xl font-bold text-white text-center">THE SIMPLE CALCULATOR</h1>
+        <div class="flex flex-row justify-end">
+            <input type="text" id="display"
+                class="mt-10 text-right w-full h-24 mt-5 bg-white-700 text-black text-3xl outline-none focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 px-3 py-2 rounded-md"
+                placeholder="0" readonly>
+        </div>
+        <div class="mt-14">
+            <div class="mt-10 grid grid-cols-4 gap-0.5">
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="percent">%</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="clearEntry">CE</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="clear">C</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="backspace">Back</button>
+            </div>
+            <div class="mt-2 grid grid-cols-4 gap-1">
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="reciprocal">1/x</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="square">x²</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="cube">x³</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="divide">/</button>
+            </div>
+            <div class="mt-2 grid grid-cols-4 gap-1">
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="7">7</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="8">8</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="9">9</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="multiply">*</button>
+            </div>
+            <div class="mt-2 grid grid-cols-4 gap-1">
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="4">4</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="5">5</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="6">6</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="subtract">-</button>
+            </div>
+            <div class="mt-2 grid grid-cols-4 gap-1">
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="1">1</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="2">2</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="3">3</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="add">+</button>
+            </div>
+            <div class="mt-2 grid grid-cols-4 gap-1">
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="negate">+/-</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="0">0</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="decimal">.</button>
+                <button class="btn bg-gray-700 text-white py-5 rounded-lg shadow-md border-2" id="equals">=</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let display = document.getElementById("display");
+        let buttons = document.querySelectorAll(".btn");
+
+        let currentInput = "";
+        let operator = null;
+        let previousInput = "";
+        let resultDisplayed = false;
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                let btnValue = button.innerText;
+
+                if (btnValue >= "0" && btnValue <= "9" || btnValue === ".") {
+                    if (resultDisplayed) {
+                        currentInput = btnValue;
+                        resultDisplayed = false;
+                    } else {
+                        currentInput += btnValue;
+                    }
+                    display.value = currentInput;
+                } else if (btnValue === "C") {
+                    currentInput = "";
+                    previousInput = "";
+                    operator = null;
+                    display.value = "0";
+                } else if (btnValue === "CE") {
+                    currentInput = "";
+                    display.value = "0";
+                } else if (btnValue === "Back") {
+                    currentInput = currentInput.slice(0, -1);
+                    display.value = currentInput || "0";
+                } else if (btnValue === "+/-") {
+                    currentInput = currentInput ? (parseFloat(currentInput) * -1).toString() : currentInput;
+                    display.value = currentInput;
+                } else if (btnValue === "%") {
+                    currentInput = currentInput ? (parseFloat(currentInput) / 100).toString() : currentInput;
+                    display.value = currentInput;
+                } else if (btnValue === "1/x") {
+                    currentInput = currentInput ? (1 / parseFloat(currentInput)).toString() : currentInput;
+                    display.value = currentInput;
+                } else if (btnValue === "x²") {
+                    currentInput = currentInput ? (Math.pow(parseFloat(currentInput), 2)).toString() : currentInput;
+                    display.value = currentInput;
+                } else if (btnValue === "x³") {
+                    currentInput = currentInput ? (Math.pow(parseFloat(currentInput), 3)).toString() : currentInput;
+                    display.value = currentInput;
+                } else if (btnValue === "+" || btnValue === "-" || btnValue === "*" || btnValue === "/") {
+                    if (previousInput && operator && currentInput) {
+                        previousInput = operate(previousInput, currentInput, operator);
+                        display.value = previousInput;
+                    } else {
+                        previousInput = currentInput;
+                    }
+                    operator = btnValue;
+                    currentInput = "";
+                } else if (btnValue === "=") {
+                    if (previousInput && operator && currentInput) {
+                        currentInput = operate(previousInput, currentInput, operator);
+                        display.value = currentInput;
+                        previousInput = "";
+                        operator = null;
+                        resultDisplayed = true;
+                    }
+                }
+            });
+        });
+
+        function operate(a, b, op) {
+            a = parseFloat(a);
+            b = parseFloat(b);
+            switch (op) {
+                case "+":
+                    return (a + b).toString();
+                case "-":
+                    return (a - b).toString();
+                case "*":
+                    return (a * b).toString();
+                case "/":
+                    return (a / b).toString();
+                default:
+                    return b;
+            }
+        }
+    </script>
+</body>
+
+</html>
